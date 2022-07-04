@@ -6,8 +6,6 @@ workflows:
     environment:
       groups:
         - group_name
-      vars:
-        PUBLIC_ENV_VAR: "value here"
       flutter: stable
       xcode: latest
     cache:
@@ -21,13 +19,9 @@ workflows:
           include: true
           source: true
       cancel_previous_builds: false
-    scripts:
-      - ...
     artifacts:
       - build/**/outputs/bundle/**/*.aab
     publishing:
       email:
         recipients:
           - sieungansang000@gmail.com
-      scripts:
-        - echo 'Post-publish script'
