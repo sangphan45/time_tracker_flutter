@@ -13,7 +13,7 @@ class PlatformExceptionAlertDialog extends PlatformAlertDialog {
         );
 
   static String? _message(PlatformException exception) {
-    // print(exception.code);
+    print('Code: ${exception.code}');
     return _errors[exception.code] ?? exception.message;
   }
 
@@ -21,6 +21,7 @@ class PlatformExceptionAlertDialog extends PlatformAlertDialog {
     'wrong-password': 'The password is invalid',
     'too-many-requests':
         'If there was too many attempts to sign in as this user',
+    'permission-denied': 'Missing or insufficient permission',
 
     ///   • `ERROR_WEAK_PASSWORD` - If the password is not strong enough.
     ///   • `ERROR_INVALID_CREDENTIAL` - If the email address is malformed.
