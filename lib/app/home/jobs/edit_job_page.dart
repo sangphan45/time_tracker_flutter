@@ -8,11 +8,11 @@ import 'package:time_tracker_flutter/services/database.dart';
 
 class EditJobPage extends StatefulWidget {
   const EditJobPage({super.key, required this.database, this.job});
-  final Database database;
+  final Database? database;
   final Job? job;
 
-  static Future<void> show(BuildContext context, {Job? job}) async {
-    final database = Provider.of<Database>(context, listen: false);
+  static Future<void> show(BuildContext context,
+      {Database? database, Job? job}) async {
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => EditJobPage(database: database, job: job),
@@ -52,8 +52,11 @@ class _EditJobPageState extends State<EditJobPage> {
   Future<void> _submit() async {
     if (_validateAndSaveForm()) {
       try {
-        final jobs = await widget.database.jobsStream().first;
+        final jobs = await widget.database!.jobsStream().first;
         final allNames = jobs.map((job) => job.name).toList();
+        if (widget.job != null) {
+          allNames.remove(widget.job!.name);
+        }
         if (allNames.contains(_name)) {
           PlatformAlertDialog(
             title: 'Name already used',
@@ -64,7 +67,7 @@ class _EditJobPageState extends State<EditJobPage> {
           final id = widget.job?.id ?? documentIdFromCurrentDate();
           final job =
               Job(id: id, name: _name ?? '', ratePerHour: _ratePerHour ?? 0);
-          await widget.database.setJob(job);
+          await widget.database!.setJob(job);
           Navigator.of(context).pop();
         }
       } on PlatformException catch (e) {
