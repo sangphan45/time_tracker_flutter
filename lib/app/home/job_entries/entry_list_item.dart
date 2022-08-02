@@ -11,7 +11,7 @@ class EntryListItem extends StatelessWidget {
   });
 
   final Entry entry;
-  final Job job;
+  final Job? job;
   final VoidCallback onTap;
 
   @override
@@ -39,7 +39,7 @@ class EntryListItem extends StatelessWidget {
     final endTime = TimeOfDay.fromDateTime(entry.end).format(context);
     final durationFormatted = Format.hours(entry.durationInHours);
 
-    final pay = job.ratePerHour * entry.durationInHours;
+    final pay = job!.ratePerHour * entry.durationInHours;
     final payFormatted = Format.currency(pay);
 
     return Column(
@@ -49,7 +49,7 @@ class EntryListItem extends StatelessWidget {
           Text(dayOfWeek, style: TextStyle(fontSize: 18.0, color: Colors.grey)),
           SizedBox(width: 15.0),
           Text(startDate, style: TextStyle(fontSize: 18.0)),
-          if (job.ratePerHour > 0.0) ...<Widget>[
+          if (job!.ratePerHour > 0.0) ...<Widget>[
             Expanded(child: Container()),
             Text(
               payFormatted,
@@ -85,7 +85,7 @@ class DismissibleEntryListItem extends StatelessWidget {
 
   final Key key;
   final Entry entry;
-  final Job job;
+  final Job? job;
   final VoidCallback onDismissed;
   final VoidCallback onTap;
 

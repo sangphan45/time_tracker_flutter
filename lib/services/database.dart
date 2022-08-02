@@ -8,9 +8,11 @@ abstract class Database {
   Future<void> setJob(Job job);
   Future<void> deleteJob(Job job);
   Stream<List<Job>> jobsStream();
+  Stream<Job> jobStream({required String jobId});
+
   Future<void> setEntry(Entry entry);
   Future<void> deleteEntry(Entry entry);
-  Stream<List<Entry>> entriesStream({required Job job});
+  Stream<List<Entry>> entriesStream({required Job? job});
 }
 
 String documentIdFromCurrentDate() => DateTime.now().toIso8601String();
@@ -41,6 +43,12 @@ class FirestoreDatabase implements Database {
   }
 
   @override
+  Stream<Job> jobStream({required String jobId}) => _service.documentStream(
+        path: APIPath.job(uid, jobId),
+        builder: (data, documentId) => Job.fromMap(data!, documentId),
+      );
+
+  @override
   Stream<List<Job>> jobsStream() => _service.collectionStream(
         path: APIPath.jobs(uid),
         builder: (data, documentId) => Job.fromMap(data, documentId),
@@ -57,7 +65,7 @@ class FirestoreDatabase implements Database {
       await _service.deleteData(path: APIPath.entry(uid, entry.id));
 
   @override
-  Stream<List<Entry>> entriesStream({required Job job}) =>
+  Stream<List<Entry>> entriesStream({required Job? job}) =>
       _service.collectionStream<Entry>(
         path: APIPath.entries(uid),
         queryBuilder: job != null

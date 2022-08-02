@@ -10,7 +10,7 @@ class Entry {
   });
 
   String id;
-  String jobId;
+  String? jobId;
   DateTime start;
   DateTime end;
   String comment;
